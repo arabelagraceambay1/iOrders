@@ -4,7 +4,6 @@
 <section class="io-auth">
     <div class="io-auth-card">
         <h1 class="io-page-title" style="font-size:1.55rem;">Create Account</h1>
-        <p class="io-page-subtitle">Set up your iOrder account</p>
 
         <form action="{{ route('register.store') }}" method="POST" class="io-grid" style="margin-top:1rem;">
             @csrf

@@ -3,60 +3,32 @@
 @section('content')
 <div class="io-page-head">
     <div>
-        <h1 class="io-page-title">Reservation Booking</h1>
-        <p class="io-page-subtitle">Select your preferred date and time slot.</p>
+        <h1 class="io-page-title">New Reservation</h1>
     </div>
 </div>
 
-<section class="io-card" style="max-width:760px;">
-    <form action="{{ route('reservations.store') }}" method="POST" class="io-grid">
+<div style="max-width: 600px; margin: 0 auto;">
+    <form action="{{ route('reservations.store') }}" method="POST" class="io-card">
         @csrf
-
-        <div class="io-grid" style="grid-template-columns:1fr 1fr;gap:0.7rem;">
-            <div>
-                <label class="io-label">Reservation Date</label>
-                <input type="date" id="reserved_date" required class="io-input">
-            </div>
-
-            <div>
-                <label class="io-label">Reservation Time</label>
-                <input type="time" id="reserved_time" required class="io-input">
-            </div>
+        <div class="io-section-space">
+            <label class="io-label">Date & Time</label>
+            <input type="datetime-local" name="reserved_for" class="io-input" required>
         </div>
 
-        <input type="hidden" id="reserved_for" name="reserved_for">
-
-        <div>
-            <label class="io-label">Party Size</label>
-            <input type="number" name="party_size" min="1" max="20" required class="io-input">
+        <div class="io-section-space">
+            <label class="io-label">Party Size (Max 20)</label>
+            <input type="number" name="party_size" class="io-input" min="1" max="20" value="1" required>
         </div>
 
-        <div>
-            <label class="io-label">Notes</label>
-            <textarea name="notes" rows="3" class="io-textarea"></textarea>
+        <div class="io-section-space">
+            <label class="io-label">Additional Notes</label>
+            <textarea name="notes" class="io-input" rows="3" placeholder="Any special requests?"></textarea>
         </div>
 
-        <div class="io-nav-actions">
+        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
             <button type="submit" class="io-btn io-btn-primary">Submit Reservation</button>
-            <a href="{{ route('reservations.index') }}" class="io-btn">Back</a>
+            <a href="{{ route('dashboard') }}" class="io-btn io-btn-soft">Cancel</a>
         </div>
     </form>
-
-    <script>
-        const dateInput = document.getElementById('reserved_date');
-        const timeInput = document.getElementById('reserved_time');
-        const reservedForInput = document.getElementById('reserved_for');
-
-        function updateReservedFor() {
-            if (dateInput.value && timeInput.value) {
-                reservedForInput.value = `${dateInput.value} ${timeInput.value}`;
-            }
-        }
-
-        dateInput.addEventListener('change', updateReservedFor);
-        timeInput.addEventListener('change', updateReservedFor);
-
-        document.querySelector('form').addEventListener('submit', updateReservedFor);
-    </script>
-</section>
+</div>
 @endsection

@@ -23,13 +23,13 @@ Current development status: around 55-60% complete (core workflow implemented, a
 - Order and reservation status tracking
 - Payment proof upload (manual receipt image)
 
-### Staff Features
+### Admin Features
 
 - Order monitoring and status updates
 - Reservation monitoring and status updates
-- Staff dashboard metrics (today orders, processing, ready, pending reservations)
+- Admin dashboard metrics (product count, low stock, pending orders/reservations)
 
-### Admin Features
+### System-Level Features
 
 - Admin dashboard with operational metrics
 - Order approval/rejection via status updates
@@ -39,7 +39,7 @@ Current development status: around 55-60% complete (core workflow implemented, a
 ### System-Level Features
 
 - Centralized database schema for users, products, orders, order items, reservations
-- Role management: customer, staff, admin
+- Role management: customer, admin
 - Browser-accessible web interface
 
 ## Not Yet Implemented (Phase 2)
@@ -57,7 +57,6 @@ Current development status: around 55-60% complete (core workflow implemented, a
 Use these seeded credentials after running database seeding:
 
 - Admin: admin@iorder.test / password123
-- Staff: staff@iorder.test / password123
 - Customer: customer@iorder.test / password123
 
 

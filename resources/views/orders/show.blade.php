@@ -4,7 +4,6 @@
 <div class="io-page-head">
     <div>
         <h1 class="io-page-title">Order #{{ $order->id }}</h1>
-        <p class="io-page-subtitle">Detailed order information and actions.</p>
     </div>
 </div>
 

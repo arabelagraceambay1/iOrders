@@ -5,7 +5,6 @@
     <div class="io-page-head" style="margin-bottom:0.7rem;">
         <div>
             <h1 class="io-page-title">iOrder</h1>
-            <p class="io-page-subtitle">Web-based ordering and reservation platform</p>
         </div>
         <div class="io-nav-actions">
             <a href="{{ route('catalog.index') }}" class="io-btn io-btn-primary">Browse Catalog</a>
@@ -28,7 +27,7 @@
     </article>
     <article class="io-card io-card-tight">
         <h3 style="font-size:1rem;color:#1b5e20;">Operations</h3>
-        <p class="io-muted" style="font-size:0.9rem;margin-top:0.35rem;">Staff and admin can monitor orders, reservations, and reporting data.</p>
+        <p class="io-muted" style="font-size:0.9rem;margin-top:0.35rem;">Admin users can monitor orders, reservations, and reporting data.</p>
     </article>
 </div>
 @endsection

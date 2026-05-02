@@ -37,6 +37,9 @@
             </nav>
 
             <div class="io-nav-actions">
+                <button type="button" id="themeToggle" class="io-icon-btn" aria-label="Toggle theme">
+                    <span id="themeToggleIcon">🌙</span>
+                </button>
                 @auth
                     @if (auth()->user()->role === 'customer')
                         <a class="io-icon-btn" href="{{ route('cart.index') }}" aria-label="Cart">

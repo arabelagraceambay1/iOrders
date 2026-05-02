@@ -1,63 +1,73 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="io-page-head">
     <div>
         <h1 class="io-page-title">Product Catalog</h1>
-        <p class="io-page-subtitle">Browse products with filters and add to cart quickly.</p>
     </div>
 </div>
 
 <section class="io-card">
-    <form method="GET" action="{{ route('catalog.index') }}" class="io-grid" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end;gap:0.7rem;">
+    <form class="io-grid" style="grid-template-columns:1fr auto auto;align-items:end;gap:0.7rem;">
         <div>
-            <label class="io-label">Search</label>
-            <input type="search" name="q" value="{{ request('q') }}" class="io-input" placeholder="Search product name">
+            <label class="io-label">Search Products</label>
+            <input type="search" name="q" value="{{ request('q') }}" class="io-input" placeholder="Search by name">
+            <input type="hidden" name="category" value="{{ request('category') }}">
         </div>
         <div>
-            <label class="io-label">Category</label>
-            <select name="category" class="io-select">
-                <option>All Categories</option>
-                <option>Beverages</option>
-                <option>Meals</option>
-                <option>Snacks</option>
+            <label class="io-label">Sort By</label>
+            <select name="sort" class="io-input">
+                <option value="">Name (A-Z)</option>
+                <option value="Price: Low to High" {{ request('sort') === 'Price: Low to High' ? 'selected' : '' }}>Price: Low to High</option>
+                <option value="Price: High to Low" {{ request('sort') === 'Price: High to Low' ? 'selected' : '' }}>Price: High to Low</option>
             </select>
         </div>
-        <div>
-            <label class="io-label">Sort</label>
-            <select name="sort" class="io-select">
-                <option>Most Relevant</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-            </select>
-        </div>
-        <button type="submit" class="io-btn io-btn-soft">Apply</button>
+        <button type="submit" class="io-btn io-btn-primary">Search</button>
     </form>
+
+    <div class="io-section-space" style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        @foreach(['PHIL OIL', 'STEEL PORT', 'NICKEL AUTO SUPPLY', 'NORENELLS', 'ONE MAN'] as $chip)
+            <a href="{{ request()->fullUrlWithQuery(['category' => $chip, 'q' => request('q'), 'sort' => request('sort')]) }}" class="io-chip {{ request('category') === $chip ? 'active' : '' }}">{{ $chip }}</a>
+        @endforeach
+        <a href="{{ request()->fullUrlWithoutQuery('category') }}" class="io-chip {{ request()->filled('category') ? '' : 'active' }}">All</a>
+    </div>
 </section>
 
-<div class="io-grid io-section-space" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
-    @forelse ($products as $product)
-        <article class="io-card">
-            <h2 style="font-size:1.06rem;color:#194522;">{{ $product->name }}</h2>
-            <p class="io-muted" style="font-size:0.88rem;margin-top:0.4rem;">{{ $product->description }}</p>
-            <div class="io-section-space" style="display:flex;justify-content:space-between;align-items:center;">
-                <p style="font-weight:700;color:#1b5e20;">Php {{ number_format($product->price, 2) }}</p>
-                <span class="io-chip">Stock {{ $product->stock_quantity }}</span>
-            </div>
-
-            @auth
-                @if (auth()->user()->role === 'customer')
-                    <form action="{{ route('cart.store') }}" method="POST" class="io-grid" style="grid-template-columns:92px 1fr;margin-top:0.8rem;">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock_quantity }}" class="io-input">
-                        <button type="submit" class="io-btn io-btn-primary">Add to Cart</button>
-                    </form>
+<section class="io-card io-section-space">
+    <div class="io-page-head" style="margin-bottom:0.6rem;">
+        <h2 style="font-size:1.08rem;color:#1b5e20;">Available Products</h2>
+    </div>
+    <div class="io-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;">
+        @forelse ($products as $product)
+            @php
+                $productImage = $product->image_url;
+            @endphp
+            <article class="io-card" style="padding:1rem;">
+                @if($productImage)
+                    <img src="{{ $productImage }}" alt="{{ $product->name }}" style="width:100%;height:150px;object-fit:cover;border-radius:0.5rem;margin-bottom:0.5rem;">
                 @endif
-            @endauth
-        </article>
-    @empty
-        <p class="io-muted">No active products available.</p>
-    @endforelse
-</div>
+                <h3 style="font-size:1rem;font-weight:600;margin-bottom:0.5rem;">{{ $product->name }}</h3>
+                <p class="io-muted" style="font-size:0.9rem;margin-bottom:0.5rem;">{{ $product->description }}</p>
+                <p style="font-weight:600;color:#1b5e20;">₱{{ number_format($product->price, 2) }}</p>
+                <p class="io-muted" style="font-size:0.8rem;">Stock: {{ $product->stock_quantity }}</p>
+                @auth
+                    @if(auth()->user()->role === 'customer')
+                        @if($product->stock_quantity > 0)
+                            <form action="{{ route('cart.store') }}" method="POST" style="margin-top:0.5rem;">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock_quantity }}" class="io-input" style="width:80px;display:inline-block;margin-right:0.5rem;">
+                                <button type="submit" class="io-btn io-btn-primary">Add to Cart</button>
+                            </form>
+                        @else
+                            <p class="io-muted" style="font-size:0.8rem;margin-top:0.5rem;">Out of Stock</p>
+                        @endif
+                    @endif
+                @endauth
+            </article>
+        @empty
+            <p class="io-muted">No products available.</p>
+        @endforelse
+    </div>
+</section>
 @endsection

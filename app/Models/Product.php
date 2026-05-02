@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -15,20 +14,30 @@ class Product extends Model
         'description',
         'price',
         'stock_quantity',
-        'is_active',
-        
+        'image',
+        'category'
     ];
 
-    protected function casts(): array
+    public function getImageUrlAttribute()
     {
-        return [
-            'price' => 'decimal:2',
-            'is_active' => 'boolean',
-        ];
-    }
+        if (! $this->image) {
+            return null;
+        }
 
-    public function orderItems(): HasMany
-    {
-        return $this->hasMany(OrderItem::class);
+        $path = trim($this->image, " '\\");
+
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            return $path;
+        }
+
+        $path = preg_replace('#^storage/#', '', $path);
+        $path = preg_replace('#^public/#', '', $path);
+        $path = preg_replace('#^storage/app/public/#', '', $path);
+        $path = ltrim($path, '/');
+
+        $segments = array_map('rawurlencode', explode('/', $path));
+        $path = implode('/', $segments);
+
+        return asset('storage/' . $path);
     }
 }

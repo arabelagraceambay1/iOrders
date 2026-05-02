@@ -4,7 +4,6 @@
 <div class="io-page-head">
     <div>
         <h1 class="io-page-title">Order Status Tracking</h1>
-        <p class="io-page-subtitle">Monitor your order lifecycle in real time.</p>
     </div>
 </div>
 

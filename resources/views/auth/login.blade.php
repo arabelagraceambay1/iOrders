@@ -4,7 +4,16 @@
 <section class="io-auth">
     <div class="io-auth-card">
         <h1 class="io-page-title" style="font-size:1.55rem;">Welcome Back</h1>
-        <p class="io-page-subtitle">Sign in to continue to iOrder</p>
+
+        @if ($errors->any())
+            <div class="io-alert io-alert-error" style="margin-top:1rem;">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <form action="{{ route('login.store') }}" method="POST" class="io-grid" style="margin-top:1rem;">
             @csrf

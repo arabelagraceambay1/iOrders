@@ -5,36 +5,36 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class DashboardController extends Controller
 {
-    public function index(): View
+    public function index(): View|RedirectResponse
     {
         $user = auth()->user();
+
+        if (!$user) {
+            return redirect('/login');
+        }
 
         if ($user->role === 'admin') {
             return view('dashboards.admin', [
                 'productCount' => Product::count(),
                 'lowStockCount' => Product::query()->where('stock_quantity', '<=', 5)->count(),
                 'pendingOrderCount' => Order::query()->where('status', 'pending')->count(),
+                'completedOrderCount' => Order::query()->where('status', 'completed')->count(),
                 'pendingReservationCount' => Reservation::query()->where('status', 'pending')->count(),
-            ]);
-        }
-
-        if ($user->role === 'staff') {
-            return view('dashboards.staff', [
-                'todayOrders' => Order::query()->whereDate('created_at', now()->toDateString())->count(),
-                'processingOrders' => Order::query()->where('status', 'processing')->count(),
-                'readyOrders' => Order::query()->where('status', 'ready')->count(),
-                'pendingReservations' => Reservation::query()->where('status', 'pending')->count(),
+                'completedReservationCount' => Reservation::query()->where('status', 'completed')->count(),
             ]);
         }
 
         return view('dashboards.customer', [
             'myOrders' => Order::query()->where('user_id', $user->id)->latest()->take(5)->get(),
             'myReservations' => Reservation::query()->where('user_id', $user->id)->latest()->take(5)->get(),
+            'products' => Product::where('is_active', true)->get(),
         ]);
     }
 

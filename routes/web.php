@@ -5,10 +5,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('home'))->name('home');
+Route::get('/', fn () => redirect('/catalog'))->name('home');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -43,12 +44,13 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
 
-    Route::middleware('role:staff,admin')->group(function (): void {
+    Route::middleware('role:admin')->group(function (): void {
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
         Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     });
 
     Route::middleware('role:admin')->group(function (): void {
+        Route::resource('products', ProductController::class);
         Route::get('/admin/reports', [DashboardController::class, 'reports'])->name('admin.reports');
         Route::get('/admin/reports/download', [DashboardController::class, 'downloadReport'])->name('admin.reports.download');
     });

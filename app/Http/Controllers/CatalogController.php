@@ -16,6 +16,10 @@ class CatalogController extends Controller
             $query->where('name', 'like', '%'.$request->string('q')->trim().'%');
         }
 
+        if ($request->filled('category')) {
+            $query->where('category', 'like', '%'.$request->string('category')->trim().'%');
+        }
+
         if ($request->input('sort') === 'Price: Low to High') {
             $query->orderBy('price');
         } elseif ($request->input('sort') === 'Price: High to Low') {

@@ -4,7 +4,6 @@
 <div class="io-page-head">
     <div>
         <h1 class="io-page-title">Shopping Cart</h1>
-        <p class="io-page-subtitle">Review selected items before checkout.</p>
     </div>
 </div>
 

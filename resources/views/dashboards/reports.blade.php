@@ -1,20 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="io-sidebar-layout">
-    <aside class="io-sidebar">
-        <a href="{{ route('dashboard') }}">Dashboard</a>
-        <a href="{{ route('orders.index') }}">Order Management</a>
-        <a href="{{ route('reservations.index') }}">Reservations</a>
-        <a href="{{ route('catalog.index') }}">Inventory</a>
-        <a href="{{ route('admin.reports') }}" class="active">Reports</a>
-    </aside>
-
     <div>
         <div class="io-page-head">
             <div>
                 <h1 class="io-page-title">Reports</h1>
-                <p class="io-page-subtitle">Order analytics and export tools</p>
             </div>
             <a href="{{ route('admin.reports.download') }}" class="io-btn io-btn-primary">Download PDF</a>
         </div>
@@ -68,5 +58,4 @@
             </div>
         </section>
     </div>
-</div>
 @endsection
